@@ -1,1 +1,0 @@
-﻿unity project version: 2022.2.7f1
