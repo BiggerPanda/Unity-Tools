@@ -48,6 +48,11 @@ namespace JM_Tools
 
         public void ChangeState(IState _newState)
         {
+            if (_newState == currenIState)
+            {
+                return;
+            }
+
             if (currenIState != null)
             {
                 currenIState.OnExit();
