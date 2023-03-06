@@ -27,7 +27,7 @@ public class PlayerExample : MonoBehaviour
         movementStateMachine.Update();
     }
 
-    private void HandleInput()
+    private void HandleInput() // Next Tool Idea Input Handler on new Unity Input System
     {
         if (Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
         {
