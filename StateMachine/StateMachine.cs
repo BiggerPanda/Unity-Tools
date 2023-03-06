@@ -12,26 +12,26 @@ namespace JM_Tools
         public void OnExit();
     }
 
-    public class StateMachine<TState> where TState : IState
+    public class StateMachine
     {
-        private TState currentState;
-        private List<TState> previousStates;
+        private IState currenIState;
+        private List<IState> previousStates;
         private int maxPreviousStates = 10;
 
-        public StateMachine(TState initialState)
+        public StateMachine(IState initialState)
         {
-            currentState = initialState;
-            previousStates = new List<TState>
+            currenIState = initialState;
+            previousStates = new List<IState>
             {
                 Capacity = maxPreviousStates
             };
         }
 
-        public StateMachine(TState initialState, int _maxPreviousStates)
+        public StateMachine(IState initialState, int _maxPreviousStates)
         {
-            currentState = initialState;
+            currenIState = initialState;
             maxPreviousStates = _maxPreviousStates;
-            previousStates = new List<TState>
+            previousStates = new List<IState>
             {
                 Capacity = maxPreviousStates
             };
@@ -39,63 +39,55 @@ namespace JM_Tools
 
         public StateMachine()
         {
-            currentState = default(TState);
-            previousStates = new List<TState>
+            currenIState = default(IState);
+            previousStates = new List<IState>
             {
                 Capacity = maxPreviousStates
             };
         }
 
-        public void ChangeState(TState _newState, Func<bool> _checkIfCanChange)
+        public void ChangeState(IState _newState)
         {
-            if (!Enum.IsDefined(typeof(TState), _newState))
+            if (currenIState != null)
             {
-                throw new ArgumentException($"Invalid state: {_newState}");
+                currenIState.OnExit();
             }
 
-            if (CanTransition(_checkIfCanChange))
+            previousStates.Insert(0, currenIState);
+            
+            if (previousStates.Count > maxPreviousStates)
             {
-                previousStates.Insert(0, currentState);
-                currentState = _newState;
-
-                if (previousStates.Count > maxPreviousStates)
-                {
-                    previousStates.TrimExcess();
-                }
+                previousStates.TrimExcess();
             }
-            else
-            {
-                // too strict, should be a warning
-                // throw new InvalidOperationException($"Invalid transition: {currentState} -> {_newState}");
 
-                Console.WriteLine($"Invalid transition: {currentState} -> {_newState}");
-            }
+            currenIState = _newState;
+            currenIState.OnEnter();
         }
 
         public void Update()
         {
-            if (currentState != null)
+            if (currenIState != null)
             {
-                currentState.Execute();
+                currenIState.Execute();
             }
         }
 
-        public TState GetCurrentState()
+        public IState GetCurrenIState()
         {
-            return currentState;
+            return currenIState;
         }
 
-        public TState GetPreviousState()
+        public IState GetPreviousState()
         {
             return previousStates[0];
         }
 
-        public List<TState> GetPreviousStates()
+        public List<IState> GetPreviousStates()
         {
             return previousStates;
         }
 
-        public TState GetPreviousState(int index)
+        public IState GetPreviousState(int index)
         {
             return previousStates[index];
         }
