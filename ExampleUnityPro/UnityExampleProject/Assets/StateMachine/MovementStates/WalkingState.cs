@@ -1,31 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using JM_Tools;
 
-public class WalkingState : IState
+namespace JM_Tools
 {
-    private StateMachine movementStateMachine;
-    private PlayerExample player;
-
-    public WalkingState(StateMachine movementStateMachine, PlayerExample player)
+    public class WalkingState : IState
     {
-        this.movementStateMachine = movementStateMachine;
-        this.player = player;
-    }
+        private StateMachine movementStateMachine;
+        private PlayerExample player;
 
-    public void OnEnter()
-    {
-        Debug.Log("WalkingState Enter");
-    }
+        public WalkingState(StateMachine movementStateMachine, PlayerExample player)
+        {
+            this.movementStateMachine = movementStateMachine;
+            this.player = player;
+        }
 
-    public void OnExit()
-    {
-        Debug.Log("WalkingState Exit");
-    }
+        public void OnEnter()
+        {
+            Debug.Log("WalkingState Enter");
+        }
 
-    public void Execute()
-    {
-        Debug.Log("WalkingState Execute");
+        public void OnExit()
+        {
+            Debug.Log("WalkingState Exit");
+        }
+
+        public void Execute()
+        {
+            Debug.Log("WalkingState Execute");
+        }
     }
 }
