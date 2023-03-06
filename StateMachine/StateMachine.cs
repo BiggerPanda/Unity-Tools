@@ -4,7 +4,15 @@ using System.Collections.Generic;
 
 namespace JM_Tools
 {
-    public class StateMachine<TState> where TState : Enum
+
+    public interface IState
+    {
+        public void OnEnter();
+        public void Execute();
+        public void OnExit();
+    }
+
+    public class StateMachine<TState> where TState : IState
     {
         private TState currentState;
         private List<TState> previousStates;
@@ -38,7 +46,7 @@ namespace JM_Tools
             };
         }
 
-        public void ChangeState(TState _newState , Func<bool> _checkIfCanChange)
+        public void ChangeState(TState _newState, Func<bool> _checkIfCanChange)
         {
             if (!Enum.IsDefined(typeof(TState), _newState))
             {
@@ -52,15 +60,23 @@ namespace JM_Tools
 
                 if (previousStates.Count > maxPreviousStates)
                 {
-                    previousStates.TrimExcess();   
+                    previousStates.TrimExcess();
                 }
             }
             else
             {
                 // too strict, should be a warning
                 // throw new InvalidOperationException($"Invalid transition: {currentState} -> {_newState}");
-                
+
                 Console.WriteLine($"Invalid transition: {currentState} -> {_newState}");
+            }
+        }
+
+        public void Update()
+        {
+            if (currentState != null)
+            {
+                currentState.Execute();
             }
         }
 
@@ -84,7 +100,7 @@ namespace JM_Tools
             return previousStates[index];
         }
 
-        private bool CanTransition(Func<bool> funcToCheck )
+        private bool CanTransition(Func<bool> funcToCheck)
         {
             return funcToCheck();
         }
