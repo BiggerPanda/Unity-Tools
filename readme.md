@@ -9,6 +9,7 @@
 - UI controller system - TODO
 - Pooling System - TODO (based on new unity system and our own system)
 - Quick Test tool/ Tests examples - TODO
+- Waiter pool
 
 # Elements for fast prototype
 
